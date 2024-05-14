@@ -34,7 +34,6 @@ const ComposeButton = styled(Button)`
 
 const SideBarContent = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const { type } = useParams();
 
   const onComposeClick = () => {
@@ -43,7 +42,7 @@ const SideBarContent = () => {
 
   return (
     <Container>
-      <ComposeButton onClick={() => onComposeClick()}>
+      <ComposeButton onClick={onComposeClick}>
         <CreateOutlined style={{ marginRight: 10 }} />
         Compose
       </ComposeButton>
@@ -60,7 +59,8 @@ const SideBarContent = () => {
                   : {}
               }
             >
-              <data.icon fontSize="small" />
+              {data.icon && <data.icon fontSize="small" />}{" "}
+              {/* Render icon if available */}
               {data.title}
             </ListItem>
           </NavLink>

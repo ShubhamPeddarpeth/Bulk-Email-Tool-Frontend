@@ -9,7 +9,6 @@ import NoMails from "./common/NoMails";
 import { EMPTY_TABS } from "../constants/constant";
 
 const Emails = () => {
-  
   const [starredEmail, setStarredEmail] = useState(false);
   const [selectedEmails, setSelectedEmails] = useState([]);
 
@@ -22,7 +21,7 @@ const Emails = () => {
 
   useEffect(() => {
     getEmailsService.call({}, type);
-  }, [type, starredEmail]);
+  }, [starredEmail, type]);
 
   const selectAllEmails = (e) => {
     if (e.target.checked) {
@@ -62,7 +61,7 @@ const Emails = () => {
         {getEmailsService?.response?.map((email) => (
           <Email
             email={email}
-            key={email.id}
+            key={email._id}
             setStarredEmail={setStarredEmail}
             selectedEmails={selectedEmails}
             setSelectedEmails={setSelectedEmails}

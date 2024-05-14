@@ -28,12 +28,14 @@ const Indicator = styled(Typography)`
   padding: 0 4px;
 `;
 
-const DateText = styled(Typography)({
-  marginLeft: "auto",
-  marginRight: 20,
-  fontSize: 12,
-  color: "#5F6368",
-});
+const DateText = styled(Typography)`
+  && {
+    margin-left: auto;
+    margin-right: 20px;
+    font-size: 12px;
+    color: #5f6368;
+  }
+`;
 
 const Email = ({
   email,
@@ -50,22 +52,22 @@ const Email = ({
   };
 
   const handleChange = () => {
-    if (selectedEmails.includes(email._id)) {
-      setSelectedEmails((prevState) =>
-        prevState.filter((id) => id !== email._id)
-      );
-    } else {
-      setSelectedEmails((prevState) => [...prevState, email._id]);
-    }
+    setSelectedEmails((prevState) =>
+      selectedEmails.includes(email._id)
+        ? prevState.filter((id) => id !== email._id)
+        : [...prevState, email._id]
+    );
   };
 
-  const formatDate = (date) => {
-    const formattedDate = new Date(date);
+  const formatDate = React.useMemo(() => {
+    const formattedDate = new Date(email.date);
     return `${formattedDate.getDate()} ${formattedDate.toLocaleString(
       "default",
-      { month: "long" }
+      {
+        month: "long",
+      }
     )}`;
-  };
+  }, [email.date]);
 
   return (
     <Wrapper>
@@ -89,13 +91,13 @@ const Email = ({
       )}
       <Box onClick={() => navigate(routes.view.path, { state: { email } })}>
         <Typography style={{ width: 200 }}>
-          To:{email.to.split("@")[0]}
+          To: {email.to.split("@")[0]}
         </Typography>
         <Indicator>Inbox</Indicator>
         <Typography>
           {`${email.subject} ${email.body ? "-" : ""} ${email.body}`}
         </Typography>
-        <DateText>{formatDate(email.date)}</DateText>
+        <DateText>{formatDate}</DateText>
       </Box>
     </Wrapper>
   );
