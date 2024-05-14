@@ -1,3 +1,4 @@
+import React from "react";
 import { ListItem, Checkbox, Typography, Box, styled } from "@mui/material";
 import { StarBorder, Star } from "@mui/icons-material";
 import useApi from "../hooks/useApi";
@@ -27,7 +28,7 @@ const Indicator = styled(Typography)`
   padding: 0 4px;
 `;
 
-const Date = styled(Typography)({
+const DateText = styled(Typography)({
   marginLeft: "auto",
   marginRight: 20,
   fontSize: 12,
@@ -41,7 +42,6 @@ const Email = ({
   setSelectedEmails,
 }) => {
   const toggleStarredEmailService = useApi(API_URLS.toggleStarredMails);
-
   const navigate = useNavigate();
 
   const toggleStarredEmail = () => {
@@ -59,42 +59,43 @@ const Email = ({
     }
   };
 
+  const formatDate = (date) => {
+    const formattedDate = new Date(date);
+    return `${formattedDate.getDate()} ${formattedDate.toLocaleString(
+      "default",
+      { month: "long" }
+    )}`;
+  };
+
   return (
     <Wrapper>
       <Checkbox
         size="small"
         checked={selectedEmails.includes(email._id)}
-        onChange={() => handleChange()}
+        onChange={handleChange}
       />
       {email.starred ? (
         <Star
           fontSize="small"
           style={{ marginRight: 10 }}
-          onClick={() => toggleStarredEmail()}
+          onClick={toggleStarredEmail}
         />
       ) : (
         <StarBorder
           fontSize="small"
           style={{ marginRight: 10 }}
-          onClick={() => toggleStarredEmail()}
+          onClick={toggleStarredEmail}
         />
       )}
-      <Box
-        onClick={() => navigate(routes.view.path, { state: { email: email } })}
-      >
+      <Box onClick={() => navigate(routes.view.path, { state: { email } })}>
         <Typography style={{ width: 200 }}>
           To:{email.to.split("@")[0]}
         </Typography>
         <Indicator>Inbox</Indicator>
         <Typography>
-          {email.subject} {email.body && "-"} {email.body}
+          {`${email.subject} ${email.body ? "-" : ""} ${email.body}`}
         </Typography>
-        <Date>
-          {new window.Date(email.date).getDate()}&nbsp;
-          {new window.Date(email.date).toLocaleString("default", {
-            month: "long",
-          })}
-        </Date>
+        <DateText>{formatDate(email.date)}</DateText>
       </Box>
     </Wrapper>
   );
